@@ -2571,9 +2571,15 @@ namespace SLua
 				else if(t.IsArray)
 					Write(file, "checkArray(l,{0},out a{1});", n + argstart, n + 1);
 				else if (IsValueType(t)) {
-					if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>))
-						Write(file, "checkNullable(l,{0},out a{1});", n + argstart, n + 1);
-					else
+                    if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>))
+                        Write(file, "checkNullable(l,{0},out a{1});", n + argstart, n + 1);
+                    else if (t.IsGenericType && (t.GetGenericTypeDefinition() == typeof(ReadOnlySpan<>) || t.GetGenericTypeDefinition() == typeof(Span<>)))
+                    { 
+                        Write(file, "{0}[] a{1}_temp;", t.GetGenericArguments()[0], n + 1);
+                        Write(file, "checkArray(l, {0}, out a{1}_temp);", n + argstart, n + 1);
+                        Write(file, "a{0}=a{1}_temp.AsSpan();", n + 1, n + 1);
+                    }
+                    else
 						Write(file, "checkValueType(l,{0},out a{1});", n + argstart, n + 1);
 				}
 				else
@@ -2664,9 +2670,11 @@ namespace SLua
 				ParameterInfo p = pars[n];
 				if (p.ParameterType.IsByRef && p.IsOut)
 					str += string.Format("out a{0}", n + 1);
-				else if (p.ParameterType.IsByRef)
+				else if (p.ParameterType.IsByRef && !p.IsIn)
 					str += string.Format("ref a{0}", n + 1);
-				else
+                else if (p.ParameterType.IsByRef && p.IsIn)
+                    str += string.Format("in a{0}", n + 1);
+                else
 					str += string.Format("a{0}", n + 1);
 				if (n < pars.Length - 1)
 					str += ",";
