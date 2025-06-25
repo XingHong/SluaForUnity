@@ -189,6 +189,16 @@ namespace SLua
                 "UnityEngine.LightProbeGroup",
                 "UnityEngine.Playables",
                 "UnityEngine.ArticulationBody",
+                "UnityEngine.Rendering.BatchDrawCommand",
+                "Unity.Profiling.LowLevel.Unsafe.ProfilerUnsafeUtility",
+                "Unity.Collections.NativeArray",
+                "UnityEngine.LineRenderer",
+                "UnityEngine.Rendering.BatchCullingOutputDrawCommands",
+                "UnityEngine.Rendering.CommandBuffer",
+                "UnityEngine.TrailRenderer",
+                "Unity.Profiling.LowLevel.Unsafe.ProfilerCategoryDescription",
+                "Unity.Profiling.LowLevel.Unsafe.ProfilerMarkerData",
+                "Unity.Profiling.LowLevel.Unsafe.ProfilerRecorderDescription",
             };
         }
     }
